@@ -21,7 +21,7 @@ setup(
     install_requires=[
         'attrs>=17.4.0,<17.5',
         'requests>=2.0,<3.0',
-        'marshmallow'#>=3.0,<4'
+        'marshmallow'#>=3.0,<4' I took out versioning to allow release candidate install
     ],
     license='MIT',
     classifiers=[
