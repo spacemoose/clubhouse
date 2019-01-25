@@ -103,8 +103,10 @@ def extract(table):
     ]
     extracted_descriptions = []
     for h in descriptions:
-        asbytes = bytes(h.text, ENCODINGS_WITH_SMART_QUOTES[0])
-        extracted_descriptions.append(unidecode(str(asbytes, ENCODINGS_WITH_SMART_QUOTES[2])))
+        if h.text is not None:
+            print (h.text)
+            asbytes = bytes(h.text, ENCODINGS_WITH_SMART_QUOTES[0])
+            extracted_descriptions.append(unidecode(str(asbytes, ENCODINGS_WITH_SMART_QUOTES[2])))
 
     logger.debug('fields: %s', extracted_fields)
     logger.debug('descriptions: %s', extracted_descriptions)
