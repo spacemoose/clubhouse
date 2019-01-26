@@ -103,8 +103,9 @@ def extract(table):
     ]
     extracted_descriptions = []
     for h in descriptions:
-        asbytes = bytes(h.text, ENCODINGS_WITH_SMART_QUOTES[0])
-        extracted_descriptions.append(unidecode(str(asbytes, ENCODINGS_WITH_SMART_QUOTES[2])))
+        if h.text is not None:
+            asbytes = bytes(h.text, ENCODINGS_WITH_SMART_QUOTES[0])
+            extracted_descriptions.append(unidecode(str(asbytes, ENCODINGS_WITH_SMART_QUOTES[2])))
 
     logger.debug('fields: %s', extracted_fields)
     logger.debug('descriptions: %s', extracted_descriptions)
@@ -117,16 +118,11 @@ def extract(table):
 def munge(datablob: Dict[str, Dict]) -> Dict[str, Dict]:
     #: searches for data between () or [] .. also matches [)..
     nested = re.compile(r'(?:\[|\()(?P<inside>.+)(?:\]|\))')
-
     def has_nested(type_):
         return any(('Array' in type_, type_ in datablob,))
-
     graph = dag.DAG()
-
     for resource_name, resource in datablob.items():
-
         graph.add_node_if_not_exists(resource_name)
-
         for details in resource.values():
             if 'or null' in details['type']:
                 details['type'] = details['type'].split(' ')[0]
