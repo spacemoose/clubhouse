@@ -1,7 +1,18 @@
 # Goal 1 is to import open issues from github, without importing
 # duplicates, and subject to certain filters.
+#
+# I have no idea what I'm doing, so I'm going step by step trying
+# stuff out.  Some of that might be useful to someone, so I'm storing
+# it here.
+#
+# I started with this https://github.com/mahmoudimus/clubhouse, which
+# seemed to be a nice start, but seems abandoned now.  This is my
+# attempt to build something usable starting with that.
+#
+# Right now I haven't gotten very far past fixing the couple of bugs
+# in the original repo.
 
-# This gets the api information from
+
 import requests
 import importlib
 import parser
@@ -22,7 +33,7 @@ def update_clubhouse_resources():
     parsed = parser.parse(html.parse("specs.html"))
     munged = parser.munge(parsed)
     rendered = parser.build(munged)
-    f = open(clubouse_resources.py)
+    f = open("clubouse_resources.py", 'w')
     f.write(rendered)
 
 

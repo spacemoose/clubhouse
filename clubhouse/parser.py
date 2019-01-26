@@ -106,7 +106,6 @@ def extract(table):
         if h.text is not None:
             asbytes = bytes(h.text, ENCODINGS_WITH_SMART_QUOTES[0])
             extracted_descriptions.append(unidecode(str(asbytes, ENCODINGS_WITH_SMART_QUOTES[2])))
-
     logger.debug('fields: %s', extracted_fields)
     logger.debug('descriptions: %s', extracted_descriptions)
     rv = {f[0]: {"type": f[1], "description": d, "args": ''}
