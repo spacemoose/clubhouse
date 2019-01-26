@@ -117,11 +117,16 @@ def extract(table):
 def munge(datablob: Dict[str, Dict]) -> Dict[str, Dict]:
     #: searches for data between () or [] .. also matches [)..
     nested = re.compile(r'(?:\[|\()(?P<inside>.+)(?:\]|\))')
+
     def has_nested(type_):
         return any(('Array' in type_, type_ in datablob,))
+
     graph = dag.DAG()
+
     for resource_name, resource in datablob.items():
-b        graph.add_node_if_not_exists(resource_name)
+
+        graph.add_node_if_not_exists(resource_name)
+
         for details in resource.values():
             if 'or null' in details['type']:
                 details['type'] = details['type'].split(' ')[0]
