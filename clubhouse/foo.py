@@ -43,60 +43,45 @@ def update_clubhouse_resources():
     f = open("clubhouse_resources.py", 'w')
     f.write(rendered)
 
-# Problem 1: We have a bunch of stories imported from github.  They
-# have an "external id", which looks like:
-#    - https://api.github.com/repos/YUNEEC/Firmware/issues/2986
-# ditch the "api." and the "/repos", and this is the correct link to the github issue.
-#
-# this should be a nice and easy fix:
-#
-# 1. find all stories with a non null "external id".
-# 2. look for "api.github.com/repos/" and turn it into "github.com/"
-# 3. save the modified external id.
+# This returns list of stories (as a dictionary) that satisfy the
+# passed query.  The query parameter is the same query string you use
+# to searc in the clubhouse interface.
 def search_stories( query):
-
-#    payload = {'page_size':100, 'query':query}
+    print ("gathering clubhouse stories", end='', flush=True)
     ss_url = clubhouse_api_url+"/api/v2/search/stories"
     r = requests.get(ss_url, params = {'query':query, 'token':clubhouse_token})
-#    print (r.url)
     r.encoding='utf-8'
     nxt = r.json()['next']
     retval = r.json()['data']
     while nxt is not None:
         nxt = nxt[nxt.rfind("=")+1:]
-        print (nxt)
         r = requests.get(ss_url,
                          params = {'query':query, 'next':nxt,'token':clubhouse_token, })
-###        print(r.url)
-        print (r.status_code)
-
         nxt = r.json()['next']
         data = r.json()['data']
         retval += data
-    print (len(retval))
+        print(".", end='', flush=True)
+    print(f"\ncollected {len(retval)} stories")
+    return retval
 
-def split_nxt(nxt):
-    print(nxt)
-    pos = nxt.find("query")
-    return nxt[:pos], nxt[pos:]
-
-def fix_github_links():
-    stories = search_stories()
+def fix_github_links(stories):
     modified=[]
-
-    for story in r.json()['data']:
+    for story in stories:
         if story['external_id'] is not None :
             if "api" in story['external_id']:
                 story['external_id'] = story['external_id'].replace("api.github.com/repos", "github.com")
                 modified.append(story)
-    for story in modified :
-        print(story['id'],story['external_id'])
+                break
+    print(f"found {len(modified)} stories with mangled external_id")
+
+#   for story in modified :
+#       print(story['id'],story['external_id'])
 
 
 def main():
 #    update_clubhouse_resources()
     stories=search_stories("has:comment")
-
+    fix_github_links(stories)
 if __name__ == '__main__':
     main()
 
