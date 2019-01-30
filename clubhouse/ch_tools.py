@@ -9,8 +9,8 @@
 # seemed to be a nice start, but seems abandoned now.  This is my
 # attempt to build something usable starting with that.
 #
-# Right now I haven't gotten very far past fixing the couple of bugs
-# in the original repo.
+# At the moment I'm just writing some super simple stuff working
+# directly with dictionaries.
 
 import requests
 import importlib
@@ -21,6 +21,7 @@ import os
 import sys
 import json
 import curlify
+importy pygithub
 from pprint import pprint
 
 from clubhouse_resources import Story
@@ -76,6 +77,9 @@ def fix_github_links(stories):
 
 #   for story in modified :
 #       print(story['id'],story['external_id'])
+
+# Given a github issue number, import that issue from github!
+def import_issue(github_number):
 
 
 def main():
