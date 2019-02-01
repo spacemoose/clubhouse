@@ -21,10 +21,10 @@ import os
 import sys
 import json
 import curlify
-importy pygithub
+
 from pprint import pprint
 
-from clubhouse_resources import Story
+#from clubhouse_resources import Story
 
 clubhouse_token=os.environ['CLUBHOUSE_TOKEN']
 clubhouse_api_url = "https://api.clubhouse.io"
@@ -79,11 +79,10 @@ def fix_github_links(stories):
 #       print(story['id'],story['external_id'])
 
 # Given a github issue number, import that issue from github!
-def import_issue(github_number):
+#def import_issue(github_number):
 
 
 def main():
-#    update_clubhouse_resources()
     stories=search_stories("has:comment")
     fix_github_links(stories)
 if __name__ == '__main__':
