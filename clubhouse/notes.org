@@ -22,7 +22,7 @@
    - [ ] name :: title
    - [ ] owner_ids :: github assignees
    - [ ] project_id (required) :: check title and labels for h520
-   - [ ] requested_by_id :: check github ids, and see if we can map them.
+   - [ ] requested_by_id :: user :: check github ids, and see if we can map them.
    - [ ] story_type ::  chore, feature, or bug Check github labels for hint.
    - [ ] updated_at :: updated_at
    - [ ] workflow_state :: state (?)
