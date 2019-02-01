@@ -1,0 +1,34 @@
+* Preliminaries
+
+  - pygithub documentation leaves a lot to be desired.
+  - github3 failed to authenticate with token, and the search
+    functionality didn't seem to be what I wanted.  So I'm going to
+    try with the pygithub again.
+
+** Contents
+
+   Now that I can read github issues and write clubhouse issues, let's
+   figure out what the contents need to be:
+
+   Looking at the create stories api, it looks like I'll need to see
+   if github offers:
+
+   clubouse :: github
+   - [ ] comments :: comments
+   - [ ] created_at :: created_at
+   - [ ] description :: body
+   - [ ] external_id :: Create a link to the issue number.
+   - [ ] labels :: use github labels, but ditch bug and h520.
+   - [ ] name :: title
+   - [ ] owner_ids :: github assignees
+   - [ ] project_id (required) :: check title and labels for h520
+   - [ ] requested_by_id :: user :: check github ids, and see if we can map them.
+   - [ ] story_type ::  chore, feature, or bug Check github labels for hint.
+   - [ ] updated_at :: updated_at
+   - [ ] workflow_state :: state (?)
+
+*** dunnos:
+   - [ ] story_links
+   - [ ] tasks :: NA
+   - [ ] file_ids : external files you want to attach to the story!
+   - [ ] linked_file_ids id of linked files to attach
