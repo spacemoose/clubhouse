@@ -34,13 +34,13 @@ def lookup_ch_user(gh_named_user):
 # create a clubhouse comment from a github issue.
 # missing the story-public-id, which has to be added
 
-def commment_from_issue(issue):
+def comment_from_gh(ghc): # ghc is github comment
     return {
-        "author_id":
-        "created_at":
-        "external_id":
-        "text':issue.body",
-        "updated_at":
+        "author_id" : lookup_ch_user(ghc.user),
+        "created_at" : ghc.created_at,
+        "external_id" : ghc.html_url,
+        "text" : ghc.body,
+        "updated_at" : ghc.updated_at
         }
 
 # extract tthe comments from github and create clubhouse compatible
@@ -50,13 +50,10 @@ def get_comments(issue):
     gh_comments = issue.get_comments()
     ch_comments = []
     for c  in gh_comments:
-        ch_comments.append(c.body)
+        ch_comments.append(comment_from_gh(c))
     return ch_comments
 
-# get labels from github but discard labels that apply to project and
-# type.
-def get_labels(issue):
-    return "todo"
+
 
 # Try to map the owner ids from github to clubhouse.
 def get_owner_ids(issue):
@@ -75,6 +72,31 @@ def get_story_type(issue):
 
 def get_workflow_state(issue):
     return "todo"
+
+
+# get labels from github but discard labels that apply to project and
+# type.
+def get_labels(issue):
+    labels = []
+    for l in issue.labels:
+        labels.append( {
+            "color" : l.color,
+            "external_id" : l.url,
+            "name" : l.name
+        })
+    return labels
+
+# Based on the labels, try to guess the project
+# @todo I should really change this to a mapping...
+def get_project_id(issue):
+    for l : issue.labels:
+        if l.name == "H520" return "h520"
+        if l.name == "V18S" return "v18"
+        if l.name == "H600" return "h600"
+    if "H520" in issue.body or "h520" in issue.body return "h520"
+    if "v18" in issue.body or "V18" in issue.body return v18
+    if "h600" in issue.body or "H600" in issue.body return "H600"
+
 
 # map a github issue to a clubhouse story.
 def issue_to_story(issue):
@@ -98,10 +120,10 @@ def passes_filter(issue):
     if issue.pull_request is None:
         return False
     for l in issue.labels:
-        print (l.name)
         if l.name == "product":
             return False
     return True
+
 
 def main():
     ois = find_repo_issues("Yuneec/Firmware")

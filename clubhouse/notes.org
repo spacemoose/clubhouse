@@ -15,12 +15,12 @@
 
    Checked means dictionary looks okay:
    clubouse :: github
-   - [ ] comments :: comments
-   - [ ] created_at :: created_at
-   - [ ] description :: body
-   - [ ] external_id :: Create a link to the issue number.
+   - [X] comments :: comments
+   - [X] created_at :: created_at
+   - [X] description :: body
+   - [X] external_id :: Create a link to the issue number.
    - [ ] labels :: use github labels, but ditch bug and h520.
-   - [ ] name :: title
+   - [X] name :: title
    - [ ] owner_ids :: github assignees
    - [ ] project_id (required) :: check title and labels for h520
    - [ ] requested_by_id :: user :: check github ids, and see if we can map them.
