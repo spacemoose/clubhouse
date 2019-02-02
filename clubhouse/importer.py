@@ -31,8 +31,19 @@ def lookup_ch_user(gh_named_user):
         return gh_user
 
 
+# create a clubhouse comment from a github issue.
+# missing the story-public-id, which has to be added
 
-# extract the comments from github and create clubhouse compatible
+def commment_from_issue(issue):
+    return {
+        "author_id":
+        "created_at":
+        "external_id":
+        "text':issue.body",
+        "updated_at":
+        }
+
+# extract tthe comments from github and create clubhouse compatible
 # comment mappings.  Map the comment owner id, otherwise use the
 # user calling the script.
 def get_comments(issue):
@@ -83,10 +94,19 @@ def issue_to_story(issue):
     }
     return story
 
+def passes_filter(issue):
+    if issue.pull_request is None:
+        return False
+    for l in issue.labels:
+        print (l.name)
+        if l.name == "product":
+            return False
+    return True
+
 def main():
     ois = find_repo_issues("Yuneec/Firmware")
     for i in ois :
-        if i.pull_request is not None:
+        if passes_filter(i):
             story = issue_to_story(i)
             print (story["external_id"])
             pprint.pprint(story)
