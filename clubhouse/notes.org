@@ -13,6 +13,7 @@
    Looking at the create stories api, it looks like I'll need to see
    if github offers:
 
+   Checked means dictionary looks okay:
    clubouse :: github
    - [ ] comments :: comments
    - [ ] created_at :: created_at
