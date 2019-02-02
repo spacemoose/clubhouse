@@ -21,11 +21,12 @@ def find_repo_issues(repo_name):
 
 
 # todo : efficiency
-def lookup_ch_user(owner):
+def lookup_ch_user(gh_named_user):
     f = open(user_mapping_file)
     ghu_to_chu = json.load(f)
-    if (owner in ghu_to_chu):
-        return ghu_to_chu[owner]
+    name =gh_named_user.login
+    if (name in ghu_to_chu):
+        return ghu_to_chu[name]
     else:
         return gh_user
 
@@ -34,11 +35,12 @@ def lookup_ch_user(owner):
 # extract the comments from github and create clubhouse compatible
 # comment mappings.  Map the comment owner id, otherwise use the
 # user calling the script.
-def comments_gh_to_ch(issue):
-    comments = issue.get_comments()
-    for c  in comments:
-        print ("---\n" , c.body, "\n-----\n")
-    return "todo"
+def get_comments(issue):
+    gh_comments = issue.get_comments()
+    ch_comments = []
+    for c  in gh_comments:
+        ch_comments.append(c.body)
+    return ch_comments
 
 # get labels from github but discard labels that apply to project and
 # type.
@@ -47,7 +49,10 @@ def get_labels(issue):
 
 # Try to map the owner ids from github to clubhouse.
 def get_owner_ids(issue):
-    return "todo"
+    owner_ids=[]
+    for o in issue.assignees:
+        owner_ids.append(lookup_ch_user(o))
+    return owner_ids
 
 # make a best guess at the desired project_id based on the github
 # labels.
@@ -62,12 +67,11 @@ def get_workflow_state(issue):
 
 # map a github issue to a clubhouse story.
 def issue_to_story(issue):
-    print(issue)
     story = {
         "comments": get_comments(issue),
         "created_at": issue.created_at,
         "description" : issue.body,
-        "external_id" : issue.url.replace("api.github.com/repos/", "github.com/"),
+        "external_id" : issue.html_url,
         "labels" : get_labels(issue),
         "name" : issue.title,
         "owner_ids" : get_owner_ids(issue),
@@ -81,11 +85,12 @@ def issue_to_story(issue):
 
 def main():
     ois = find_repo_issues("Yuneec/Firmware")
-    iss = ois[0]
-    story = issue_to_story(iss)
-    pprint.pprint(story)
-
-
+    for i in ois :
+        if i.pull_request is not None:
+            story = issue_to_story(i)
+            print (story["external_id"])
+            pprint.pprint(story)
+            break
 #    story = issue_to_story(ois[0])
 
 
