@@ -47,8 +47,15 @@ def comment_from_gh(ghc): # ghc is github comment
 # comment mappings.  Map the comment owner id, otherwise use the
 # user calling the script.
 def get_comments(issue):
-    gh_comments = issue.get_comments()
     ch_comments = []
+    # okay, now it's getting silly, fix this
+    f = open(user_mapping_file)
+    gtc = json.load(f)
+
+    name = issue.user.login
+    if (name not in gtc):
+        ch_comments.append("Issue created in Github by " + name)
+    gh_comments = issue.get_comments()
     for c  in gh_comments:
         ch_comments.append(comment_from_gh(c))
     return ch_comments
@@ -67,11 +74,15 @@ def get_owner_ids(issue):
 def get_project_id(issue):
     return "todo"
 
+# if it can't figure out the type from the tags, I assume it's  a bug...
 def get_story_type(issue):
-    return "todo"
-
-def get_workflow_state(issue):
-    return "todo"
+    for l in issue.labels:
+        if l.name == "bug": return "bug"
+        if l.name == "crash" : return "bug"
+        if l.name == "critical" : return "bug"
+        if l.name == "enhancement" : return "feature"
+        if l.name == "cleanup & maintenance": return "chore"
+    return "bug"
 
 
 # get labels from github but discard labels that apply to project and
@@ -79,10 +90,10 @@ def get_workflow_state(issue):
 def get_labels(issue):
     labels = []
     for l in issue.labels:
-        labels.append( {
-            "color" : l.color,
-            "external_id" : l.url,
-            "name" : l.name
+        labels.append({
+            "color": l.color,
+            "external_id": l.url,
+            "name": l.name
         })
     return labels
 
@@ -90,49 +101,61 @@ def get_labels(issue):
 # @todo I should really change this to a mapping...
 def get_project_id(issue):
     for l in issue.labels:
-        if l.name == "H520" return "h520"
-        if l.name == "V18S" return "v18"
-        if l.name == "H600" return "h600"
-    if "H520" in issue.body or "h520" in issue.body return "h520"
-    if "v18" in issue.body or "V18" in issue.body return v18
-    if "h600" in issue.body or "H600" in issue.body return "H600"
-
+        if l.name == "H520": return "h520"
+        if l.name == "V18S": return "v18"
+        if l.name == "H600": return "h600"
+    if "H520" in issue.body or "h520" in issue.body: return "h520"
+    if "v18" in issue.body  or "V18"  in issue.body: return "v18"
+    if "h600" in issue.body or "H600" in issue.body: return "H600"
+    return "Firmware imports"
 
 # map a github issue to a clubhouse story.
 def issue_to_story(issue):
     story = {
+        "external_id" : issue.html_url,
         "comments": get_comments(issue),
         "created_at": issue.created_at,
         "description" : issue.body,
-        "external_id" : issue.html_url,
         "labels" : get_labels(issue),
         "name" : issue.title,
         "owner_ids" : get_owner_ids(issue),
         "project_id" : get_project_id(issue),
         "requested_by_id" : lookup_ch_user(issue.user),
         "story_type" : get_story_type(issue),
-        "updated_at" : issue.updated_at,
-        "workflow_state" : get_workflow_state(issue)
+        "updated_at" : issue.updated_at
     }
     return story
 
 def passes_filter(issue):
-    if issue.pull_request is None:
+    if issue.pull_request is not None:
         return False
     for l in issue.labels:
         if l.name == "product":
             return False
     return True
 
+def issues_to_stories(max_count):
+    stories = []
+    ois = find_repo_issues("Yuneec/Firmware")
+    count = 0
+    for i in ois :
+        print (i.html_url)
+        if passes_filter(i):
+            stories.append(issue_to_story(i))
+            count +=1
+            print(count)
+            if count > max_count : break
+    return stories
+
+
 
 def main():
-    ois = find_repo_issues("Yuneec/Firmware")
-    for i in ois :
-        if passes_filter(i):
-            story = issue_to_story(i)
-            print (story["external_id"])
-            pprint.pprint(story)
-            break
+    stories = issues_to_stories(10)
+
+    for story in stories:
+        pprint.pprint(story)
+
+
 #    story = issue_to_story(ois[0])
 
 
