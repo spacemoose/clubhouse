@@ -89,7 +89,7 @@ def get_labels(issue):
 # Based on the labels, try to guess the project
 # @todo I should really change this to a mapping...
 def get_project_id(issue):
-    for l : issue.labels:
+    for l in issue.labels:
         if l.name == "H520" return "h520"
         if l.name == "V18S" return "v18"
         if l.name == "H600" return "h600"
