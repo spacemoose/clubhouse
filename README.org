@@ -1,0 +1,53 @@
+* Clubhouse tools
+
+  My team and I chose (at least for now) [[clubhouse.io][clubhouse]] to manage our
+  issues and workflow and all that.  We're pretty happy about the
+  decision so far, but we make extensive use of Github, and the tools
+  available for importing, exporting, syncing and so on aren't as
+  available as one might hope.
+
+  So I decided to whip something out on my own that suits my needs.
+  I decided it would be a good opportunity to practice a little
+  python.  I have little skill in this problem domain, and it was a
+  useful for me.
+
+  Be warned, these aren't generally useful libraries (yet, who
+  knows?), they are custom tools that solve a specific problems for me
+  and my team.  If you have skills an problems similar to mine these
+  might save you some time.
+
+  Up till now I was going for the shortest path to being able to
+  import something.  Now I might work on making it a little more
+  generally useful, efficient, prettier.  Like I said, it's a bit of a
+  learning project for me.
+
+  So, there's a good chance you're way better with Python and restful
+  ap usage, and all that, so if you have some tips or improvements for
+  me those would be much appreciated.  As I said, this is partly a
+  learning project.
+
+  If you want to make these more generally useful, that would be
+  awesome -- go for it!  Feel free to fork or sent pull requests,
+  whatever works best for you.
+
+  The files of interest are:
+
+   - importer.py :: lets me import issues from github into clubhouse.
+   - ch_tools :: some methods that let me
+
+  When I first started out doing this I forked from
+  [[https://github.com/mahmoudimus/clubhouse][this project]].  So far that was a waste of time, but it looks like a
+  really cool idea.  Right now there's a debugged version of that in
+  the experimental branch if you're interested.  I should probably
+  send the guy a pull request sometime.
+
+** Coming up
+
+   - Correctly import github api stuff, without importing duplicates.
+   - Sync states between github and clubhouse stories.
+   - Fix the github api links the previous tool created.  Currenlty
+     modifying the external_id isn't supported.  Would have to copy
+     and destroy..
+
+# I can't get authentication via token to work in requests, so pass
+# the user and password by commnd line for now.

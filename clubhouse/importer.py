@@ -4,6 +4,7 @@ import os
 import json
 import pprint
 import requests
+import ch_tools
 
 clubhouse_api_url = "https://api.clubhouse.io/api/v2/"
 clubhouse_token=os.environ['CLUBHOUSE_TOKEN']
@@ -110,9 +111,8 @@ def get_project_id(issue, projects):
     return projects["Firmware imports"]
 
 
-# map a github issue to a clubhouse story.
 def issue_to_story(issue, projects):
-
+    """Map a github issue to a clubhouse story. """
     story = {
         "external_id" : issue.html_url,
         "comments": get_comments(issue),
@@ -122,7 +122,6 @@ def issue_to_story(issue, projects):
         "name" : issue.title,
         "owner_ids" : get_owner_ids(issue),
         "project_id" : get_project_id(issue, projects),
-        "requested_by_id" : lookup_ch_user(issue.user),
         "story_type" : get_story_type(issue),
         "updated_at" : issue.updated_at.strftime("%Y-%m-%dT%H:%M:%SZ")
     }

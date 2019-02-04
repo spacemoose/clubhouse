@@ -33,7 +33,7 @@ clubhouse_api_url = "https://api.clubhouse.io"
 # Parse the Resources section from Clubhouse's documentation and
 # generate marshmallow schemas that can be sued for interacting with
 # the API.
-def update_clubhouse_resources():
+def update_resources():
     r = requests.get("https://clubhouse.io/api/rest/v2/")
     f = open("specs.html", 'w')
     r.encoding='utf-8'
@@ -43,6 +43,12 @@ def update_clubhouse_resources():
     rendered = parser.build(munged)
     f = open("clubhouse_resources.py", 'w')
     f.write(rendered)
+
+def make_request():
+    """ Creates the appropriate request  with the given parameters."""
+
+def username_to_uuid():
+    "Get the map of login names to UUID.  """
 
 # This returns list of stories (as a dictionary) that satisfy the
 # passed query.  The query parameter is the same query string you use
@@ -67,25 +73,6 @@ def search_stories( query):
     print(f"\ncollected {len(retval)} stories")
     return retval
 
-# sadly, it turns out the api doesn't yet support modifying
-# external_id.  I could archive and create new stories, but that would
-# be a bit of work, so I'll let it slide for now.
-# # def fix_github_links(stories):
-# #     modified=[]
-# #     for story in stories:
-# #         if story['external_id'] is not None :
-# #             if "api" in story['external_id']:
-# #                 story['external_id'] = story['external_id'].replace("api.github.com/repos", "github.com")
-# #                 modified.append(story)
-# #                 break
-# #     print(f"found {len(modified)} stories with mangled external_id")
-
-# # #   for story in modified :
-# # #       print(story['id'],story['external_id'])
-
-# # # Given a github issue number, import that issue from github!
-# # #def import_issue(github_number):
-
 
 def main():
     stories=search_stories("has:comment")
@@ -94,20 +81,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# Let's try reading something from clubhouse:
-#  1. Get list of open stories in clubhouse.
-#  2. Get list of recently (param date) closed stories in clubhouse.
-#
-#  a) gonna need an authentication token.
-#  b) clubouse will barf ifmore than 200 requests per minute.
-
-
-# TODOS
-#   1. fix all the github api links.
-#   2. correctly import github api stuff, without impoting duplicates.
-#   3. sync states between github and clubhouse stories.
-
-# I can't get authentication via token to work in requests, so pass
-# the user and password by commnd line for now.
