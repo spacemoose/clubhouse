@@ -32,7 +32,7 @@ class py_ch:
     token = os.environ['CLUBHOUSE_TOKEN']
 
     def __init__(self):
-        self.unarchived_stories = self.search_stories("!is:archived")
+        self.stories = self.search_stories("!is:archived")
         self.user_ids = self.get_username_map()
 
     def get_username_map(self):
@@ -75,22 +75,22 @@ class py_ch:
             params = {'query':query, 'next':nxt,'token':self.token }
             data = self.search(params)
             nxt = data['next']
-            retval += data
+            retval += data["data"]
             print(".", end='', flush=True)
-
-
         print(f"\ncollected {len(retval)} stories")
         return retval
+
+    def get_by_issue(self, issue_id):
+        """Return a story with external_id ending with the github issue id, or return None object"""
+        return (lambda s : s['external_id'].has(f'/{issue_id}'), self.stories)
 
 
 
 def main():
     pc = py_ch()
     pprint (pc.user_ids)
-
-#    stories=search_stories("has:comment")
-#   for s in stories:
-#        pprint (s)
+    for s in pc.stories:
+        pprint(s)
 
 if __name__ == '__main__':
                 main()

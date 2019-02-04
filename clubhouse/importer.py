@@ -145,11 +145,13 @@ def passes_filter(issue):
             return False
     return True
 
+def get_open_issues():
+    open_issues = find_repo_issues("Yuneec/Firmware")
 
 def issues_to_stories(max_count):
     stories = []
     projects = get_projects()
-    open_issues = find_repo_issues("Yuneec/Firmware")
+
     count = 0
     for i in open_issues :
         if passes_filter(i):
