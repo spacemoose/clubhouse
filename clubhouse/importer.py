@@ -164,13 +164,9 @@ def issues_to_stories(max_count):
 def create_in_clubhouse(story):
     headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
     stories_url = clubhouse_api_url+ "stories"+ "?token="+clubhouse_token
-    #"requested_by_id",
-    keys = ("name", "project_id","labels","external_id", "created_at", "description","comments",  "story_type", "updated_at", "owner_ids")
-    temp = dict()
-    for k in keys : temp[k] = story[k]
     print (stories_url)
-    pprint.pprint(json.dumps(temp))
-    r = requests.post(stories_url, data=json.dumps(temp), headers=headers)
+    pprint.pprint(json.dumps(story))
+    r = requests.post(stories_url, data=json.dumps(story), headers=headers)
     pprint.pprint(r.url)
     pprint.pprint(r.json())
 
