@@ -62,29 +62,36 @@ def search_stories( query):
         data = r.json()['data']
         retval += data
         print(".", end='', flush=True)
+        # for testing purposes:
+        break;
     print(f"\ncollected {len(retval)} stories")
     return retval
 
-def fix_github_links(stories):
-    modified=[]
-    for story in stories:
-        if story['external_id'] is not None :
-            if "api" in story['external_id']:
-                story['external_id'] = story['external_id'].replace("api.github.com/repos", "github.com")
-                modified.append(story)
-                break
-    print(f"found {len(modified)} stories with mangled external_id")
+# sadly, it turns out the api doesn't yet support modifying
+# external_id.  I could archive and create new stories, but that would
+# be a bit of work, so I'll let it slide for now.
+# # def fix_github_links(stories):
+# #     modified=[]
+# #     for story in stories:
+# #         if story['external_id'] is not None :
+# #             if "api" in story['external_id']:
+# #                 story['external_id'] = story['external_id'].replace("api.github.com/repos", "github.com")
+# #                 modified.append(story)
+# #                 break
+# #     print(f"found {len(modified)} stories with mangled external_id")
 
-#   for story in modified :
-#       print(story['id'],story['external_id'])
+# # #   for story in modified :
+# # #       print(story['id'],story['external_id'])
 
-# Given a github issue number, import that issue from github!
-#def import_issue(github_number):
+# # # Given a github issue number, import that issue from github!
+# # #def import_issue(github_number):
 
 
 def main():
     stories=search_stories("has:comment")
-    fix_github_links(stories)
+    for s in stories:
+        pprint (s)
+
 if __name__ == '__main__':
     main()
 
