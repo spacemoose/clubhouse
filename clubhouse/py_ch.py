@@ -33,6 +33,7 @@ class py_ch:
 
     def __init__(self):
         self.stories = self.search_stories("!is:archived")
+        self.imports = list(filter(lambda s: s['external_id'] is not None, self.stories))
         self.user_ids = self.get_username_map()
 
     def get_username_map(self):
@@ -40,7 +41,7 @@ class py_ch:
         r = requests.get(self.api_url + "/members?token=" + self.token)
         members = dict()
         for m in r.json():
-            members[m["profile"]["name"]] = m["id"]
+            members[m["profile"]["mention_name"]] = m["id"]
         return members
 
 
@@ -81,8 +82,13 @@ class py_ch:
         return retval
 
     def get_by_issue(self, issue_id):
-        """Return a story with external_id ending with the github issue id, or return None object"""
-        return (lambda s : s['external_id'].has(f'/{issue_id}'), self.stories)
+        """Return a story matching the passed github issue id, or return None object"""
+        l = list(filter(lambda s: f"/{issue_id}" in s['external_id'] , self.imports))
+        if not l:
+            return None
+        if len(l) > 1:
+            print (f"found {len(l)} issues in clubhouse with github id {issue_id}, returning the first")
+        return l[0]
 
 
 
