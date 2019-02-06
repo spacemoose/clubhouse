@@ -7,21 +7,22 @@ import config
 
 
 class importer:
+    clubhouse_api_url = "https://api.clubhouse.io/api/v2/"
 
     def __init__(self, repo_name):
         """ this asssumes you have a config.py defined, which provides the
         necessary authentificationinformation, and user mapping."""
-        config.clubhouse_api_url = "https://api.clubhouse.io/api/v2/"
+
         # I didn't get token authentification to work quickly enough, hence
         # this hack:
         self.clubhouse_projects = self.init_projects()
         self.gh_repo = Github(config.gh_user,
-                              config.gh_pass).get_repo(repo_name)
+                              config.gh_password).get_repo(repo_name)
         self.open_issues = self.gh_repo.get_issues(state='open')
         self.pych = py_ch()
 
     def init_projects(self):
-        projects_url = config.clubhouse_api_url + "projects"
+        projects_url = self.clubhouse_api_url + "projects"
         r = requests.get(projects_url,
                          params={'token': config.clubhouse_token})
         clubhouse_projects = dict()
@@ -31,8 +32,8 @@ class importer:
 
     def lookup_ch_user(self, gh_named_user):
         name = gh_named_user.login
-        if (name in config.usermap):
-            return config.usermap[name]
+        if (name in config.user_mapping):
+            return config.user_mapping[name]
         else:
             return config.gh_user
 
@@ -51,7 +52,7 @@ class importer:
         comment mappings.  Map the comment owner id, otherwise use the
         user calling the script."""
         ch_comments = []
-        if (issue.user.login not in config.usermap):
+        if (issue.user.login not in config.user_mapping):
             ch_comments.append({"text": "Issue created in Github by "
                                 + issue.user.login})
         gh_comments = issue.get_comments()
@@ -141,7 +142,7 @@ class importer:
         pprint(story)
         headers = {'Content-Type': 'application/json',
                    'Accept': 'application/json'}
-        stories_url = config.clubhouse_api_url + "stories"
+        stories_url = self.clubhouse_api_url + "stories"
         + "?token=" + config.clubhouse_token
         print(stories_url)
         pprint(json.dumps(story))
@@ -161,16 +162,9 @@ class importer:
 
 # just for testing
 def main():
-    imp = importer()
-    stories = [ ]
+    imp = importer(config.default_repo)
     for iss in imp.open_issues:
-        stories = issues_to_stories(0)
-    for story in stories:
-        create_in_clubhouse(story)
-
-
-#    story = issue_to_story(ois[0])
-
+        pprint(imp.issue_to_story(iss))
 
 
 if __name__ == '__main__':
