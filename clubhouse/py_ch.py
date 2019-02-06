@@ -46,7 +46,8 @@ class py_ch:
 
 
     def search(self, params):
-        """ Return the response json if it was succsful, print diagnostics and return None if it failed"""
+        """ Return the response json if it was succsful, print diagnostics
+        and return None if it failed"""
         ss_url = self.api_url+"/search/stories"
         r = requests.get(ss_url,  params = params)
         r.encoding='utf-8'
@@ -59,9 +60,9 @@ class py_ch:
 
     def search_stories(self, query):
         """Return a list of clubhouse stories that satisfies the passed query.
-                    Any string passed as a search term in the web interface should produce
-                    identicl results here.  The returned stories are simple dictionaries
-                    consisting with field names as keys."""
+        Any string passed as a search term in the web interface should produce
+        identical results here.  The returned stories are simple dictionaries
+        omment consisting with field names as keys."""
         print ("gathering clubhouse stories", end='', flush=True)
         params = {'query':query, 'token':self.token}
         data = self.search(params)
