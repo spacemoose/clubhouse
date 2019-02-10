@@ -115,7 +115,8 @@ class importer:
     def issue_to_story(self, issue):
         """Map a github issue to a clubhouse story. """
         story = {
-            "requester": self.lookup_ch_user(issue.user),
+            #todo refactor the id lookup:
+            "requested_by_id": self.pych.user_ids[self.lookup_ch_user(issue.user)],
             "external_id": issue.html_url,
             "comments": self.get_comments(issue),
             "created_at": issue.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),

@@ -1,3 +1,9 @@
+* TODO Really, no joke
+
+  - [ ] get the current state, like at least if it's closed.
+  - [ ] Update our cache of stored CH issues when a new issue is added
+    (currently I'm discarding the informatoin, boo)
+
 * Preliminaries
 
   - pygithub documentation leaves a lot to be desired.
