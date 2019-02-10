@@ -53,8 +53,8 @@ class importer:
         user calling the script."""
         ch_comments = []
         if (issue.user.login not in config.user_mapping):
-            ch_comments.append({"text": "Issue created in Github by "
-                                + issue.user.login})
+            ch_comments.append({"text": "Issue created in Github by "+ issue.user.login,
+                                "created_at": issue.created_at.strftime("%Y-%m-%dT%H:%M:%SZ")})
         gh_comments = issue.get_comments()
         for c in gh_comments:
             ch_comments.append(self.comment_from_gh(c))
@@ -115,6 +115,7 @@ class importer:
     def issue_to_story(self, issue):
         """Map a github issue to a clubhouse story. """
         story = {
+            "requester": self.lookup_ch_user(issue.user),
             "external_id": issue.html_url,
             "comments": self.get_comments(issue),
             "created_at": issue.created_at.strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -142,8 +143,7 @@ class importer:
         pprint(story)
         headers = {'Content-Type': 'application/json',
                    'Accept': 'application/json'}
-        stories_url = self.clubhouse_api_url + "stories"
-        + "?token=" + config.clubhouse_token
+        stories_url = self.clubhouse_api_url + "stories" + "?token=" + config.clubhouse_token
         print(stories_url)
         pprint(json.dumps(story))
         r = requests.post(stories_url, data=json.dumps(story), headers=headers)
