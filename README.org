@@ -41,13 +41,9 @@
   the experimental branch if you're interested.  I should probably
   send the guy a pull request sometime.
 
-** Coming up
+* Things to do
 
-   - Correctly import github api stuff, without importing duplicates.
-   - Sync states between github and clubhouse stories.
-   - Fix the github api links the previous tool created.  Currenlty
-     modifying the external_id isn't supported.  Would have to copy
-     and destroy..
-
-# I can't get authentication via token to work in requests, so pass
-# the user and password by commnd line for now.
+** TODO CLOSE issues when stories are closed.
+** TODO IMPORT new issue comments.
+** TODO EXPORT new story comments.
+** TODO
