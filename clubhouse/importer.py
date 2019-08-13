@@ -18,7 +18,8 @@ class importer:
         self.clubhouse_projects = self.init_projects()
         self.gh_repo = Github(config.gh_user,
                               config.gh_password).get_repo(repo_name)
-        self.open_issues = self.gh_repo.get_issues(state='open')
+        self.open_prs = self.gh_repo.get_pulls(state='open')
+        self.open_issues = self.populate_issues()
         self.pych = py_ch()
 
     def init_projects(self):
@@ -113,7 +114,9 @@ class importer:
         return self.clubhouse_projects["Firmware imports"]
 
     def issue_to_story(self, issue):
-        """Map a github issue to a clubhouse story. """
+        """Returns a clubhouse story -- a dicationary which can be used to
+           create a clubhouse story.  Looks up the correct user name from a gihub
+           user name, maps labels."""
         story = {
             #todo refactor the id lookup:
             "requested_by_id": self.pych.user_ids[self.lookup_ch_user(issue.user)],
@@ -161,11 +164,18 @@ class importer:
             self.create_in_clubhouse(self.issue_to_story(issue))
 
 
+
+# This just prints the stories that would be created,
+# gotta add a couple lines to actually make them...
+# cuz I somtetimes just need to test.
+def import_from_gh_to_ch(imp):
+    for iss in imp.open_issues:
+        pprint(imp.issue_to_story(iss))
+
+
 # just for testing
 def main():
     imp = importer(config.default_repo)
-    for iss in imp.open_issues:
-        pprint(imp.issue_to_story(iss))
 
 
 if __name__ == '__main__':

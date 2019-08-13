@@ -2,7 +2,6 @@ import requests
 import config
 
 
-# @todo: make a story class.
 
 def ghid(story):
     """Given a story, extract a github id if one is present"""
@@ -34,7 +33,7 @@ class pyclub:
         return members
 
     def search(self, params):
-        """ Return the response json if it was succsful, print diagnostics
+        """ Return the response json if it was successful, print diagnostics
         and return None if it failed"""
         ss_url = self.api_url+"/search/stories"
         r = requests.get(ss_url,  params=params)

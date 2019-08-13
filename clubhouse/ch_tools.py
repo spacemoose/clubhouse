@@ -30,29 +30,9 @@ clubhouse_token=os.environ['CLUBHOUSE_TOKEN']
 clubhouse_api_url = "https://api.clubhouse.io"
 
 
-# Parse the Resources section from Clubhouse's documentation and
-# generate marshmallow schemas that can be sued for interacting with
-# the API.
-def update_resources():
-    r = requests.get("https://clubhouse.io/api/rest/v2/")
-    f = open("specs.html", 'w')
-    r.encoding='utf-8'
-    f.write(r.text)
-    parsed = parser.parse(html.parse("specs.html"))
-    munged = parser.munge(parsed)
-    rendered = parser.build(munged)
-    f = open("clubhouse_resources.py", 'w')
-    f.write(rendered)
-
-def make_request():
-    """ Creates the appropriate request  with the given parameters."""
-
-def username_to_uuid():
-    "Get the map of login names to UUID.  """
-
 # This returns list of stories (as a dictionary) that satisfy the
 # passed query.  The query parameter is the same query string you use
-# to searc in the clubhouse interface.
+# to search in the clubhouse interface.
 def search_stories( query):
     print ("gathering clubhouse stories", end='', flush=True)
     ss_url = clubhouse_api_url+"/api/v2/search/stories"

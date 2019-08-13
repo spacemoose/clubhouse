@@ -35,15 +35,17 @@
    - importer.py :: lets me import issues from github into clubhouse.
    - ch_tools :: some methods that let me
 
+* Dependancies
+  - pip3 install PyGithub
+  - you'll need a config.py file that gives credential information
+
+* Authentification
+
+** TODO FILL THIS IN...
+
+* Probably useless info
   When I first started out doing this I forked from
   [[https://github.com/mahmoudimus/clubhouse][this project]].  So far that was a waste of time, but it looks like a
   really cool idea.  Right now there's a debugged version of that in
   the experimental branch if you're interested.  I should probably
   send the guy a pull request sometime.
-
-* Things to do
-
-** TODO CLOSE issues when stories are closed.
-** TODO IMPORT new issue comments.
-** TODO EXPORT new story comments.
-** TODO

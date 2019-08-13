@@ -53,7 +53,7 @@ class py_ch:
         """Return a list of clubhouse stories that satisfies the passed query.
         Any string passed as a search term in the web interface should produce
         identical results here.  The returned stories are simple dictionaries
-        omment consisting with field names as keys."""
+        comment consisting with field names as keys."""
         print("gathering clubhouse stories", end='', flush=True)
         params = {'query': query, 'token': config.clubhouse_token}
         data = self.search(params)
